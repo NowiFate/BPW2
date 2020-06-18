@@ -3,27 +3,49 @@
 public class SwitchScript : MonoBehaviour
 {
     private bool isPulled = false;
-
-    public GameObject switchingObject, switchedObject;
+    public SpriteRenderer switchingObject;
+    public SpriteRenderer switchedObject;
+    public Sprite switchOn, switchOff;
+    public BoxCollider2D switchingCollider;
+    public BoxCollider2D switchedCollider;
 
     private void Start()
     {
-        switchedObject.SetActive(false);
+        switchingObject.sprite = switchOn;
+        switchingCollider.enabled = true;
+        switchedObject.sprite = switchOff;
+        switchedCollider.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            if (isPulled == false)
-            {
-                transform.Rotate(0.0f, 180.0f, 0.0f);
-                isPulled = true;
+            Switch();
+        }
+    }
 
-                //switching
-                switchingObject.SetActive(false);
-                switchedObject.SetActive(true);
-            }
+    private void Switch()
+    {
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+
+        if (isPulled == false)
+        {
+            isPulled = true;
+
+            switchingObject.sprite = switchOff;
+            switchingCollider.enabled = false;
+            switchedObject.sprite = switchOn;
+            switchedCollider.enabled = true;
+        }
+        else
+        {
+            isPulled = false;
+
+            switchingObject.sprite = switchOn;
+            switchingCollider.enabled = true;
+            switchedObject.sprite = switchOff;
+            switchedCollider.enabled = false;
         }
     }
 }

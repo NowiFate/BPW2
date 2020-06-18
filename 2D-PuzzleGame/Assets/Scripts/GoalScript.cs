@@ -4,17 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GoalScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject winScreen;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,6 +17,7 @@ public class GoalScript : MonoBehaviour
     IEnumerator NextLevel()
     {
         PlayerControlls.Instance.canMove = false;
+        winScreen.SetActive(true);
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
