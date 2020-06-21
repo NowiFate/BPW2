@@ -13,9 +13,19 @@ public class Manager : MonoBehaviour
         Instance = this;
     }
 
+    public void NextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
     public void GameOver()
     {
         StartCoroutine(Death());
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 
     IEnumerator Death()

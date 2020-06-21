@@ -4,12 +4,15 @@ using UnityEngine.UI;
 public class PlayerControlls : MonoBehaviour
 {
     public static PlayerControlls Instance;
-    public float moveSpeed =1f;
-    public float jumpHeight = 1f;
+    public float moveSpeed =3f;
+    public float jumpHeight = 5f;
     public int blocksNumber;
     public bool canMove = true;
-
+    public Transform groundCheckBehind;
+    public Transform groundCheckFront;
+    public LayerMask groundLayer;
     public Text blockText;
+    public Sprite holding, notHolding;
 
     // Start is called before the first frame update
     void Awake()
@@ -21,7 +24,17 @@ public class PlayerControlls : MonoBehaviour
     void Update()
     {
         //textupdate
-        blockText.text = "Blocks :" + blocksNumber.ToString();
+        blockText.text = "Blocks: " + blocksNumber.ToString();
+
+        //Sprite update
+        if (holding != null && notHolding != null)
+        {
+            if(blocksNumber > 0 )GetComponent<SpriteRenderer>().sprite = holding;
+            else
+            {
+                GetComponent<SpriteRenderer>().sprite = notHolding;
+            }
+        }
 
         //reset
         if (Input.GetKeyDown(KeyCode.Z))
@@ -43,18 +56,20 @@ public class PlayerControlls : MonoBehaviour
             }
 
             //jump
-            if (Input.GetButtonDown("Jump"))
+            if (Physics2D.Raycast(groundCheckBehind.transform.position, -Vector2.up, 0.1f, groundLayer) || 
+                Physics2D.Raycast(groundCheckFront.transform.position, -Vector2.up, 0.1f, groundLayer))
             {
-                gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
+                if (Input.GetButtonDown("Jump"))
+                {
+                    gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
+                }
+
             }
 
             //Place Blocks
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (blocksNumber > 0)
-                {
-                    BlockScript.Instance.SpawnBlock();
-                }
+                if (blocksNumber > 0) BlockScript.Instance.SpawnBlock();
             }
         }
     }

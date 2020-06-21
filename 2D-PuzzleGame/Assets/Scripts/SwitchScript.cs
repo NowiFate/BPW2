@@ -1,26 +1,34 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class SwitchScript : MonoBehaviour
 {
     private bool isPulled = false;
-    public SpriteRenderer switchingObject;
-    public SpriteRenderer switchedObject;
-    public Sprite switchOn, switchOff;
-    public BoxCollider2D switchingCollider;
-    public BoxCollider2D switchedCollider;
+
+    public UnityEvent switchingOn;
+    public UnityEvent switchingOff;
+    public GameObject energyBolt;
+    public AudioSource switchSound;
+    public AudioSource Bolt;
 
     private void Start()
     {
-        switchingObject.sprite = switchOn;
-        switchingCollider.enabled = true;
-        switchedObject.sprite = switchOff;
-        switchedCollider.enabled = false;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" || collision.gameObject == energyBolt)
         {
+            if (collision.gameObject == energyBolt)
+            {
+                Bolt.Play();
+                Destroy(energyBolt.gameObject);
+            }
+            else
+            {
+                switchSound.Play();
+            }
             Switch();
         }
     }
@@ -32,20 +40,12 @@ public class SwitchScript : MonoBehaviour
         if (isPulled == false)
         {
             isPulled = true;
-
-            switchingObject.sprite = switchOff;
-            switchingCollider.enabled = false;
-            switchedObject.sprite = switchOn;
-            switchedCollider.enabled = true;
+            switchingOn?.Invoke();
         }
         else
         {
             isPulled = false;
-
-            switchingObject.sprite = switchOn;
-            switchingCollider.enabled = true;
-            switchedObject.sprite = switchOff;
-            switchedCollider.enabled = false;
+            switchingOff?.Invoke();
         }
     }
 }
