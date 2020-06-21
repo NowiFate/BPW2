@@ -273,7 +273,7 @@ PrefabInstance:
     - target: {fileID: 4998336248104939653, guid: bb7542ff64f87c14f9d62b29cfb49623,
         type: 3}
       propertyPath: m_Text
-      value: Quit game
+      value: Bye Bye~
       objectReference: {fileID: 0}
     - target: {fileID: 4998336248104939653, guid: bb7542ff64f87c14f9d62b29cfb49623,
         type: 3}
